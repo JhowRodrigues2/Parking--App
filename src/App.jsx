@@ -5,8 +5,43 @@ import Car from "./assets/carro.png";
 import Moto from "./assets/moto.png";
 import Truck from "./assets/caminhao.png";
 import Bike from "./assets/bicicleta.png";
+import { useEffect } from "react";
 
 function App() {
+  const [carModel, setCarModel] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
+  const [vehicleType, setVehicleType] = useState(null);
+  const [time, setTime] = useState();
+  const [data, setData] = useState({ n: "", l: "", p: "", t: "" });
+
+  const hours = Math.floor(time / 60);
+  const minutes = time % 60;
+
+  useEffect(() => {
+    if (time === 0) {
+      alert("Tempo acabou!"); //colocar a vaga no ALERT
+      return;
+    } else {
+      setTimeout(() => {
+        setTime(time - 1);
+      }, 60000);
+    }
+  }, [time]);
+
+  //<img src={`/src/assets/${vehicleType}.png`}></img>;
+
+  /*<span>{hours.toString().padStart(2, "0")}</span>
+  <span>{minutes.toString().padStart(2, "0")}</span>*/
+
+  const checkBug = () => {
+    setData({
+      n: carModel,
+      l: licensePlate,
+      p: `/src/assets/${vehicleType}.png`,
+      t: time,
+    });
+  };
+  console.log(data);
   return (
     <div className="w-full h-full flex items-center mt-7 justify-center gap-10 flex-wrap">
       <section className="first-section h-[80vh] w-2/5">
@@ -20,49 +55,92 @@ function App() {
             <input
               className="font-[Inter, sans-serif] h-8 rounded-lg border-[1px] border-[#424554] text-white text-center bg-[#272b3b]"
               type="text"
+              onChange={(e) => setCarModel(e.target.value)}
             />
             <label>Placa: </label>
             <input
               className=" font-[Inter, sans-serif]h-8 rounded-lg border-[1px] border-[#424554] text-white text-center bg-[#272b3b]"
               type="text"
+              onChange={(e) => setLicensePlate(e.target.value)}
             />
           </div>
         </div>
         <div className="left-bottom h-1/2 bg-white">
           <div className="h-1/2 flex justify-around">
             <div className="w-[130px] cursor-pointer flex flex-col items-center">
-              <img src={Car} alt="" />
+              <img src={Car} alt="" onClick={() => setVehicleType("carro")} />
               <span>Carro</span>
             </div>
             <div className="w-[130px] cursor-pointer flex flex-col items-center">
-              <img src={Moto} alt="" />
+              <img
+                src={Moto}
+                alt=""
+                onClick={() => {
+                  setVehicleType("Moto");
+                }}
+              />
               <span>Moto</span>
             </div>
             <div className="w-[130px] cursor-pointer flex flex-col items-center">
-              <img src={Truck} alt="" />
+              <img
+                src={Truck}
+                alt=""
+                onClick={() => {
+                  setVehicleType("Caminhão");
+                }}
+              />
               <span>Caminhão</span>
             </div>
             <div className="w-[130px] cursor-pointer flex flex-col items-center">
-              <img src={Bike} alt="" />
+              <img
+                src={Bike}
+                alt=""
+                onClick={() => {
+                  setVehicleType("Bicicleta");
+                }}
+              />
               <span>Bicicleta</span>
             </div>
           </div>
           <div className="h-1/3 flex items-center justify-around">
-            <button className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl">
+            <button
+              className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl"
+              onClick={() => {
+                setTime(60);
+              }}
+            >
               1h
             </button>
-            <button className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl">
+            <button
+              className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl"
+              onClick={() => {
+                setTime(180);
+              }}
+            >
               3h
             </button>
-            <button className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl">
+            <button
+              className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl"
+              onClick={() => {
+                setTime(720);
+              }}
+            >
               12h
             </button>
-            <button className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl">
+            <button
+              className="w-[60px] h-[30px] cursor-pointer text-center border-[1px] border-[#424554] rounded-3xl"
+              onClick={() => {
+                setTime(1440);
+              }}
+            >
               24h
             </button>
           </div>
           <div className="h-1/5 flex items-center justify-center ">
-            <button className="h-7 w-4/5  bg-[#3278fd] border-none text-white rounded-xl font-bold hover:bg-[#254f9c] hover:h-9 hover:ease-in duration-100 ">
+            <button
+              className="h-7 w-4/5  bg-[#3278fd] border-none text-white rounded-xl font-bold hover:bg-[#254f9c] hover:h-9 hover:ease-in duration-100 "
+              onClick={checkBug}
+            >
               CADASTRAR
             </button>
           </div>
@@ -76,6 +154,7 @@ function App() {
           <div className="flex h-[90%] w-2/4 flex-col">
             <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
               <button className="w-8 bg-[#3278fd] border-none">X</button>
+              <img src={data.t} alt="" />
             </div>
 
             <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
