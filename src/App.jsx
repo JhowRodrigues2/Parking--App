@@ -6,14 +6,18 @@ import Moto from "./assets/moto.png";
 import Truck from "./assets/caminhao.png";
 import Bike from "./assets/bicicleta.png";
 import { useEffect } from "react";
+import LeftParking from "./Components/LeftParking";
+import RightParking from "./Components/RightParking";
 
 function App() {
+  /*<span>{hours.toString().padStart(2, "0")}</span>
+  <span>{minutes.toString().padStart(2, "0")}</span>*/
   const [carModel, setCarModel] = useState("");
   const [licensePlate, setLicensePlate] = useState("");
-  const [vehicleType, setVehicleType] = useState(null);
+  const [vehicleType, setVehicleType] = useState("");
   const [time, setTime] = useState();
-  const [data, setData] = useState({ n: "", l: "", p: "", t: "" });
-
+  const [data, setData] = useState([]);
+  const [img, setImg] = useState("");
   const hours = Math.floor(time / 60);
   const minutes = time % 60;
 
@@ -26,22 +30,20 @@ function App() {
         setTime(time - 1);
       }, 60000);
     }
-  }, [time]);
+    setImg(`/src/assets/${vehicleType}.png`);
+  }, [data]);
 
-  //<img src={`/src/assets/${vehicleType}.png`}></img>;
-
-  /*<span>{hours.toString().padStart(2, "0")}</span>
-  <span>{minutes.toString().padStart(2, "0")}</span>*/
+  //<img src={img} alt="" />
 
   const checkBug = () => {
-    setData({
-      n: carModel,
-      l: licensePlate,
-      p: `/src/assets/${vehicleType}.png`,
-      t: time,
-    });
+    const newCar = {
+      model: carModel,
+      LP: licensePlate,
+      type: vehicleType,
+      tm: time,
+    };
+    setData((prevState) => [...prevState, newCar]);
   };
-  console.log(data);
   return (
     <div className="w-full h-full flex items-center mt-7 justify-center gap-10 flex-wrap">
       <section className="first-section h-[80vh] w-2/5">
@@ -152,34 +154,21 @@ function App() {
         </div>
         <div className="flex h-[90%]">
           <div className="flex h-[90%] w-2/4 flex-col">
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-              <img src={data.t} alt="" />
-            </div>
-
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] border-r-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
+            {data.length <= 4
+              ? data.map((c) => (
+                  <LeftParking
+                    modelo={c.model}
+                    placa={c.LP}
+                    veiculo={c.type}
+                    tempo={c.tm}
+                  />
+                ))
+              : null}
           </div>
           <div className="flex flex-col items-end h-[90%] w-1/2">
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] justify-end border-l-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] justify-end border-l-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] justify-end border-l-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
-            <div className="h-[22%] w-[90%] flex border-[1px] border-[#424554] justify-end border-l-0">
-              <button className="w-8 bg-[#3278fd] border-none">X</button>
-            </div>
+            {data.length > 4
+              ? data.map((c) => <RightParking name={c.model} />)
+              : null}
           </div>
         </div>
       </section>
