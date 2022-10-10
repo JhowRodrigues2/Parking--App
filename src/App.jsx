@@ -16,7 +16,7 @@ function App() {
   const [licensePlate, setLicensePlate] = useState("");
   const [vehicleType, setVehicleType] = useState("");
   const [time, setTime] = useState();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{}]);
   const [img, setImg] = useState("");
   const hours = Math.floor(time / 60);
   const minutes = time % 60;
@@ -32,7 +32,7 @@ function App() {
     }
     setImg(`/src/assets/${vehicleType}.png`);
   }, [data]);
-
+  console.log(data);
   //<img src={img} alt="" />
 
   const checkBug = () => {
@@ -154,21 +154,26 @@ function App() {
         </div>
         <div className="flex h-[90%]">
           <div className="flex h-[90%] w-2/4 flex-col">
-            {data.length <= 4
-              ? data.map((c) => (
-                  <LeftParking
-                    modelo={c.model}
-                    placa={c.LP}
-                    veiculo={c.type}
-                    tempo={c.tm}
-                  />
-                ))
-              : null}
+            {data.length < 5 &&
+              data.map((c) => (
+                <LeftParking
+                  modelo={c.model}
+                  placa={c.LP}
+                  veiculo={c.type}
+                  tempo={c.tm}
+                />
+              ))}
           </div>
           <div className="flex flex-col items-end h-[90%] w-1/2">
-            {data.length > 4
-              ? data.map((c) => <RightParking name={c.model} />)
-              : null}
+            {data.length > 5 &&
+              data.map((c) => (
+                <RightParking
+                  modelo={c.model}
+                  placa={c.LP}
+                  veiculo={c.type}
+                  tempo={c.tm}
+                />
+              ))}
           </div>
         </div>
       </section>
